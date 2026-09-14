@@ -42,7 +42,7 @@ command -v shasum >/dev/null || { echo "error: shasum not found" >&2; exit 1; }
 command -v zip >/dev/null || { echo "error: zip not found" >&2; exit 1; }
 
 echo "==> Building Release ($VERSION)"
-dotnet build "$PROJECT_DIR/Edwards.Hello.csproj" -c Release
+dotnet build "$PROJECT_DIR/Edwards.Hello.csproj" -c Release -p:Version="$VERSION" -p:IncludeSourceRevisionInInformationalVersion=false
 
 BUILD_OUT="$PROJECT_DIR/bin/Release/net10.0"
 ENTRY_DLL="$BUILD_OUT/Edwards.Hello.dll"

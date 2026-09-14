@@ -10,12 +10,16 @@ namespace Edwards.Hello;
 /// Runs on both hosts. Headless has no plugin storage (<c>Storage.IsAvailable</c> is false
 /// there), so on headless it logs instead of writing. Loading on both hosts lets the launcher's
 /// runtime gate check that a headless character with a blank plugin list loads nothing.
+///
+/// Once the character is in the world it posts one local system chat line naming its version, so a
+/// tester can see which release loaded. Nothing is sent to the server.
 /// </summary>
 public sealed class HelloPlugin : IAcDreamPlugin
 {
     private const string StorageKey = "last-enabled-at";
 
     private IPluginHost? _host;
+    private bool _announced;
 
     public void Initialize(IPluginHost host) => _host = host;
 
@@ -34,10 +38,33 @@ public sealed class HelloPlugin : IAcDreamPlugin
         {
             host.Log.Warn("edwards.hello: plugin storage unavailable on this host; nothing written.");
         }
+
+        _announced = false;
+        host.Events.Tick += OnTick;
     }
 
     public void Disable()
     {
+        if (_host is not null)
+            _host.Events.Tick -= OnTick;
         _host = null;
     }
+
+    private void OnTick(double deltaSeconds)
+    {
+        IPluginHost? host = _host;
+        if (host is null || _announced || !host.Automation.IsAvailable)
+            return;
+
+        _announced = true;
+        host.Events.Tick -= OnTick;
+        host.Automation.Chat.PostSystemMessage("Hello " + Version + " loaded (edwards.hello).");
+    }
+
+    private static string Version =>
+        typeof(HelloPlugin).Assembly
+            .GetCustomAttributes(typeof(System.Reflection.AssemblyInformationalVersionAttribute), false)
+            .OfType<System.Reflection.AssemblyInformationalVersionAttribute>()
+            .Select(attribute => attribute.InformationalVersion.Split('+')[0])
+            .FirstOrDefault() ?? "unknown";
 }
