@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>Edwards.Hello</RootNamespace>
+    <AssemblyName>Edwards.Hello</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      A plain assembly Reference to a build output copied out of a local OpenAC checkout, not a
+      ProjectReference into OpenAC's source tree. This repo's own build must never build inside
+      someone else's checkout or touch its branch (workspace rule), so this DLL is a scratch copy:
+      lib/AcDream.Plugin.Abstractions.dll, taken from OpenAC's built client payload
+      (bin/payload/client-osx-arm64/AcDream.Plugin.Abstractions.dll at the 0.1.7 release this
+      plugin targets). Private=false so it is not copied into our own output — the host provides
+      its own copy at load time.
+    -->
+    <Reference Include="AcDream.Plugin.Abstractions">
+      <HintPath>lib/AcDream.Plugin.Abstractions.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="plugin.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
