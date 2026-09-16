@@ -4,7 +4,31 @@
   "version": "0.1.0",
   "entryDll": "Edwards.Hello.dll",
   "apiVersion": 1,
-  "kinds": ["gameplay"],
-  "hosts": ["graphical", "headless"],
-  "minHostVersion": "0.1.7"
+  "kinds": [
+    "gameplay"
+  ],
+  "hosts": [
+    "graphical",
+    "headless"
+  ],
+  "minHostVersion": "0.1.7",
+  "capabilitiesVersion": 1,
+  "capabilities": [
+    {
+      "name": "chatRead",
+      "note": "Watches chat for the word hello so it can answer."
+    },
+    {
+      "name": "fileWrite",
+      "note": "Writes a small log beside the client so I can debug crashes."
+    },
+    {
+      "name": "analytics",
+      "note": "Counts how often the plugin loads, so I know if anyone uses it."
+    },
+    {
+      "name": "network",
+      "note": "Checks once a day whether a newer version has been published."
+    }
+  ]
 }
