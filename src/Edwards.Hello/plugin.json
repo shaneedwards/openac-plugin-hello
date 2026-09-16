@@ -15,7 +15,7 @@
   "capabilitiesVersion": 1,
   "capabilities": [
     {
-      "name": "chatRead",
+      "name": "chat",
       "note": "Watches chat for the word hello so it can answer."
     },
     {
